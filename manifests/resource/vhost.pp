@@ -591,6 +591,7 @@ define nginx::resource::vhost (
     group  => $group,
     mode   => $mode,
     notify => Class['::nginx::service'],
+    require => File[$vhost_dir],
   }
 
   $ssl_only = ($ssl == true) and (($ssl_port + 0) == ($listen_port + 0))
@@ -711,7 +712,7 @@ define nginx::resource::vhost (
     ensure  => $vhost_symlink_ensure,
     path    => "${vhost_enable_dir}/${name_sanitized}.conf",
     target  => $config_file,
-    require => Concat[$config_file],
+    require => [File[$vhost_enable_dir],Concat[$config_file]],
     notify  => Class['::nginx::service'],
   }
 
