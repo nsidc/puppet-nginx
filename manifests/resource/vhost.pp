@@ -194,6 +194,7 @@ define nginx::resource::vhost (
   $ipv6_listen_port             = 80,
   $ipv6_listen_options          = 'default ipv6only=on',
   $add_header                   = undef,
+  $cors                         = false,
   $ssl                          = false,
   $ssl_listen_option            = true,
   $ssl_cert                     = undef,
@@ -601,6 +602,7 @@ define nginx::resource::vhost (
     nginx::resource::location {"${name_sanitized}-default":
       ensure                      => $ensure,
       vhost                       => $name_sanitized,
+      cors                        => $cors,
       ssl                         => $ssl,
       ssl_only                    => $ssl_only,
       location                    => '/',
