@@ -189,6 +189,7 @@ define nginx::resource::location (
   $priority             = 500,
   $mp4             = false,
   $flv             = false,
+  $cors            = false
 ) {
 
   $root_group = $::nginx::config::root_group
