@@ -1,3 +1,4 @@
+# nginx::params
 class nginx::params {
   ### Operating System Configuration
   ## This is my hacky... no hiera system. Oh well. :)

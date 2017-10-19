@@ -88,7 +88,8 @@ define nginx::resource::mailhost (
     fail('$ipv6_listen_ip must be a string or array.')
   }
   if is_string($ipv6_listen_port) {
-    warning('DEPRECATION: String $ipv6_listen_port must be converted to an integer. Integer string support will be removed in a future release.')
+    warning("DEPRECATION: String ${ipv6_listen_port} must be converted to an integer.\
+             Integer string support will be removed in a future release.")
   }
   elsif !is_integer($ipv6_listen_port) {
     fail('$ipv6_listen_port must be an integer.')
