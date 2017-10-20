@@ -21,6 +21,7 @@ describe 'nginx::package' do
 
     context 'package_source => nginx-mainline' do
       let(:params) { { package_source: 'nginx-mainline' } }
+
       it do
         is_expected.to contain_yumrepo('nginx-release').with(
           'baseurl' => "http://nginx.org/packages/mainline/#{operatingsystem == 'CentOS' ? 'centos' : 'rhel'}/6/$basearch/"
@@ -31,6 +32,7 @@ describe 'nginx::package' do
     context 'manage_repo => false' do
       let(:facts) { { operatingsystem: operatingsystem, osfamily: 'RedHat', operatingsystemmajrelease: '7' } }
       let(:params) { { manage_repo: false } }
+
       it { is_expected.to contain_package('nginx') }
       it { is_expected.not_to contain_yumrepo('nginx-release') }
     end
@@ -82,6 +84,7 @@ describe 'nginx::package' do
 
     context 'package_source => nginx-mainline' do
       let(:params) { { package_source: 'nginx-mainline' } }
+
       it do
         is_expected.to contain_apt__source('nginx').with(
           'location' => "http://nginx.org/packages/mainline/#{operatingsystem.downcase}"
@@ -91,6 +94,7 @@ describe 'nginx::package' do
 
     context "package_source => 'passenger'" do
       let(:params) { { package_source: 'passenger' } }
+
       it { is_expected.to contain_package('nginx') }
       it { is_expected.to contain_package('passenger') }
       it do
@@ -104,6 +108,7 @@ describe 'nginx::package' do
 
     context 'manage_repo => false' do
       let(:params) { { manage_repo: false } }
+
       it { is_expected.to contain_package('nginx') }
       it { is_expected.not_to contain_apt__source('nginx') }
       it { is_expected.not_to contain_package('passenger') }
