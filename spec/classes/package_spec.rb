@@ -116,7 +116,6 @@ describe 'nginx::package' do
   end
 
   context 'debian' do
-    it_behaves_like 'debian', 'Debian', 'wheezy', 'Debian', '6'
     it_behaves_like 'debian', 'Ubuntu', 'precise', 'Ubuntu', '12.04'
   end
 
