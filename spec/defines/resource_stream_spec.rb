@@ -23,6 +23,7 @@ describe 'nginx::resource::streamhost' do
   describe 'os-independent items' do
     describe 'basic assumptions' do
       let(:params) { default_params }
+
       it { is_expected.to contain_class('nginx::config') }
       it do
         is_expected.to contain_concat("/etc/nginx/streams-available/#{title}.conf").with('owner' => 'root',

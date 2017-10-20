@@ -25,6 +25,7 @@ describe 'nginx::resource::vhost' do
   describe 'os-independent items' do
     describe 'basic assumptions' do
       let(:params) { default_params }
+
       it { is_expected.to contain_class('nginx::config') }
       it do
         is_expected.to contain_concat("/etc/nginx/sites-available/#{title}.conf").with('owner' => 'root',
@@ -636,6 +637,7 @@ describe 'nginx::resource::vhost' do
                                  :ssl_key            => 'dummy.key',
                                  :ssl_cert           => 'dummy.crt')
           end
+
           it { is_expected.to contain_concat__fragment("#{title}-ssl-header") }
           it param[:title] do
             matches = Array(param[:match])
@@ -741,7 +743,7 @@ describe 'nginx::resource::vhost' do
             ssl: true,
             ssl_cert: 'cert',
             ssl_key: 'key',
-            server_name: %w(www.foo.com bar.foo.com foo.com),
+            server_name: %w[www.foo.com bar.foo.com foo.com],
             use_default_location: false,
             rewrite_www_to_non_www: true
           }
@@ -756,7 +758,7 @@ describe 'nginx::resource::vhost' do
         let(:title) { 'foo.com' }
         let(:params) do
           {
-            server_name: %w(www.foo.com bar.foo.com foo.com),
+            server_name: %w[www.foo.com bar.foo.com foo.com],
             use_default_location: false,
             rewrite_www_to_non_www: true
           }
@@ -840,7 +842,7 @@ describe 'nginx::resource::vhost' do
           default_params.merge(uwsgi: 'uwsgi_upstream')
         end
 
-        it { should contain_file('/etc/nginx/uwsgi_params').with_mode('0660') }
+        it { is_expected.to contain_file('/etc/nginx/uwsgi_params').with_mode('0660') }
       end
 
       context 'when listen_port == ssl_port' do

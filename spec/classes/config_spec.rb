@@ -497,7 +497,7 @@ describe 'nginx::config' do
         {
           title: 'should contain ordered appended proxy_set_header directives',
           attr: 'proxy_set_header',
-          value: %w(header1 header2),
+          value: %w[header1 header2],
           match: [
             '  proxy_set_header        header1;',
             '  proxy_set_header        header2;'
@@ -506,7 +506,7 @@ describe 'nginx::config' do
         {
           title: 'should contain ordered appended proxy_hide_header directives',
           attr: 'proxy_hide_header',
-          value: %w(header1 header2),
+          value: %w[header1 header2],
           match: [
             '  proxy_hide_header        header1;',
             '  proxy_hide_header        header2;'
@@ -549,6 +549,7 @@ describe 'nginx::config' do
 
     context 'when conf_dir is /path/to/nginx' do
       let(:params) { { conf_dir: '/path/to/nginx' } }
+
       it { is_expected.to contain_file('/path/to/nginx/nginx.conf').with_content(%r{include       /path/to/nginx/mime\.types;}) }
       it { is_expected.to contain_file('/path/to/nginx/nginx.conf').with_content(%r{include /path/to/nginx/conf\.d/\*\.conf;}) }
       it { is_expected.to contain_file('/path/to/nginx/nginx.conf').with_content(%r{include /path/to/nginx/sites-enabled/\*;}) }
@@ -556,6 +557,7 @@ describe 'nginx::config' do
 
     context 'when confd_purge true' do
       let(:params) { { confd_purge: true } }
+
       it do
         is_expected.to contain_file('/etc/nginx/conf.d').with(
           purge: true,
@@ -566,19 +568,21 @@ describe 'nginx::config' do
 
     context 'when confd_purge false' do
       let(:params) { { confd_purge: false } }
+
       it do
         is_expected.to contain_file('/etc/nginx/conf.d').without(
-          %w(
+          %w[
             ignore
             purge
             recurse
-          )
+          ]
         )
       end
     end
 
     context 'when vhost_purge true' do
       let(:params) { { vhost_purge: true } }
+
       it do
         is_expected.to contain_file('/etc/nginx/sites-available').with(
           purge: true,
@@ -595,37 +599,39 @@ describe 'nginx::config' do
 
     context 'when vhost_purge false' do
       let(:params) { { vhost_purge: false } }
+
       it do
         is_expected.to contain_file('/etc/nginx/sites-available').without(
-          %w(
+          %w[
             ignore
             purge
             recurse
-          )
+          ]
         )
       end
       it do
         is_expected.to contain_file('/etc/nginx/sites-enabled').without(
-          %w(
+          %w[
             ignore
             purge
             recurse
-          )
+          ]
         )
       end
       it do
         is_expected.to contain_file('/var/log/nginx').without(
-          %w(
+          %w[
             ignore
             purge
             recurse
-          )
+          ]
         )
       end
     end
 
     context 'when daemon_user = www-data' do
       let(:params) { { daemon_user: 'www-data' } }
+
       it { is_expected.to contain_file('/var/nginx/client_body_temp').with(owner: 'www-data') }
       it { is_expected.to contain_file('/var/nginx/proxy_temp').with(owner: 'www-data') }
       it { is_expected.to contain_file('/etc/nginx/nginx.conf').with_content %r{^user www-data;} }

@@ -14,6 +14,7 @@ describe 'nginx::resource::mailhost' do
   describe 'os-independent items' do
     describe 'basic assumptions' do
       let(:params) { default_params }
+
       it { is_expected.to contain_class('nginx::config') }
       it do
         is_expected.to contain_concat("/etc/nginx/conf.mail.d/#{title}.conf").with('owner' => 'root',
@@ -77,7 +78,7 @@ describe 'nginx::resource::mailhost' do
         {
           title: 'should set servername(s)',
           attr: 'server_name',
-          value: %w(name1 name2),
+          value: %w[name1 name2],
           match: '  server_name           name1 name2;'
         },
         {
@@ -237,7 +238,7 @@ describe 'nginx::resource::mailhost' do
         {
           title: 'should set servername(s)',
           attr: 'server_name',
-          value: %w(name1 name2),
+          value: %w[name1 name2],
           match: '  server_name           name1 name2;'
         },
         {

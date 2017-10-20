@@ -17,12 +17,6 @@ describe 'nginx::resource::upstream' do
     ]
   end
 
-  let :pre_condition do
-    [
-      'include ::nginx::config'
-    ]
-  end
-
   describe 'os-independent items' do
     describe 'basic assumptions' do
       let(:params) { default_params }
@@ -60,7 +54,7 @@ describe 'nginx::resource::upstream' do
           fragment: 'header',
           value: {
             'test3' => 'test value 3',
-            'test6' => { 'subkey1' => %w(subvalue1 subvalue2) },
+            'test6' => { 'subkey1' => %w[subvalue1 subvalue2] },
             'test1' => 'test value 1',
             'test2' => 'test value 2',
             'test5' => { 'subkey1' => 'subvalue1' },
@@ -81,7 +75,7 @@ describe 'nginx::resource::upstream' do
           title: 'should set server',
           attr: 'members',
           fragment: 'members',
-          value: %w(test3 test1 test2),
+          value: %w[test3 test1 test2],
           match: [
             '  server     test3  fail_timeout=10s;',
             '  server     test1  fail_timeout=10s;',

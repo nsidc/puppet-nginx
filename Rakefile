@@ -1,7 +1,7 @@
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet_blacksmith/rake_tasks'
 require 'voxpupuli/release/rake_tasks'
-require 'puppet-strings/rake_tasks'
+require 'puppet-strings/tasks'
 
 if RUBY_VERSION >= '2.3.0'
   require 'rubocop/rake_task'
@@ -15,12 +15,12 @@ end
 PuppetLint.configuration.log_format = '%{path}:%{linenumber}:%{check}:%{KIND}:%{message}'
 PuppetLint.configuration.send('relative')
 
-exclude_paths = %w(
+exclude_paths = %w[
   pkg/**/*
   vendor/**/*
   .vendor/**/*
   spec/**/*
-)
+]
 PuppetLint.configuration.ignore_paths = exclude_paths
 PuppetSyntax.exclude_paths = exclude_paths
 
@@ -30,8 +30,8 @@ RSpec::Core::RakeTask.new(:acceptance) do |t|
 end
 
 desc 'Run tests metadata_lint, release_checks'
-task test: [
-  :metadata_lint,
-  :release_checks,
+task test: %i[
+  metadata_lint
+  release_checks
 ]
 # vim: syntax=ruby
