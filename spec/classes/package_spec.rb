@@ -57,14 +57,15 @@ describe 'nginx::package' do
     end
   end
 
-  shared_examples 'debian' do |operatingsystem, lsbdistcodename, lsbdistid, operatingsystemmajrelease|
+  shared_examples 'debian' do |os, lsbdistcodename, lsbdistid, osmajrelease|
     let(:facts) do
       {
-        operatingsystem: operatingsystem,
-        operatingsystemmajrelease: operatingsystemmajrelease,
+        os: { name: os, release: { full: '16.04' }},
+        osmajrelease: osmajrelease,
         osfamily: 'Debian',
         lsbdistcodename: lsbdistcodename,
-        lsbdistid: lsbdistid
+        lsbdistid: lsbdistid,
+        operatingsystem: os
       }
     end
 
@@ -73,7 +74,7 @@ describe 'nginx::package' do
       it { is_expected.not_to contain_package('passenger') }
       it do
         is_expected.to contain_apt__source('nginx').with(
-          'location'   => "http://nginx.org/packages/#{operatingsystem.downcase}",
+          'location'   => "http://nginx.org/packages/#{os.downcase}",
           'repos'      => 'nginx',
           'key'        => '573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62'
         )
@@ -87,7 +88,7 @@ describe 'nginx::package' do
 
       it do
         is_expected.to contain_apt__source('nginx').with(
-          'location' => "http://nginx.org/packages/mainline/#{operatingsystem.downcase}"
+          'location' => "http://nginx.org/packages/mainline/#{os.downcase}"
         )
       end
     end
@@ -125,7 +126,8 @@ describe 'nginx::package' do
   end
 
   context 'other' do
-    let(:facts) { { operatingsystem: 'xxx', osfamily: 'linux' } }
+    let(:facts) { { os: 'xxx', osfamily: 'linux' } }
+
     it { is_expected.to contain_package('nginx') }
   end
 end
