@@ -1,12 +1,11 @@
 {
   "name": "puppet-nginx",
-  "version": "0.4.1-rc0",
-  "author": "Vox Pupuli",
+  "version": "0.4.0",
+  "author": "Vox Pupuli, NSIDC",
   "summary": "Puppet NGINX management module",
   "license": "MIT",
   "source": "https://github.com/voxpupuli/puppet-nginx.git",
-  "project_page": "http://github.com/voxpupuli/puppet-nginx",
-  "issues_url": "https://github.com/voxpupuli/puppet-nginx/issues",
+  "project_page": "https://github.com/nsidc/puppet-nginx",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
