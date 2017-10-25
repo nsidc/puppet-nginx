@@ -30,10 +30,6 @@ group :test do
   gem 'voxpupuli-release',                                          require: false, git: 'https://github.com/voxpupuli/voxpupuli-release-gem.git'
 end
 
-group :development do
-  gem 'guard-rake',   require: false
-end
-
 group :system_tests do
   if beaker_version = ENV['BEAKER_VERSION']
     gem 'beaker', *location_for(beaker_version)
