@@ -68,7 +68,9 @@
 #     TLSv1.2'.
 #   [*ssl_buffer_size*]     - Sets the size of the buffer used for sending data.
 #   [*ssl_ciphers*]         - SSL ciphers enabled. Defaults to
+# lint:ignore:140chars
 #     'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA'.
+# lint:endignore
 #   [*ssl_stapling*]        - Bool: Enables or disables stapling of OCSP
 #     responses by the server. Defaults to false.
 #   [*ssl_stapling_file*]   - String: When set, the stapled OCSP response
@@ -205,7 +207,9 @@ define nginx::resource::vhost (
   $ssl_port                     = 443,
   $ssl_protocols                = 'TLSv1 TLSv1.1 TLSv1.2',
   $ssl_buffer_size              = undef,
+  # lint:ignore:140chars
   $ssl_ciphers                  = 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA',
+  # lint:endignore
   $ssl_cache                    = 'shared:SSL:10m',
   $ssl_crl                      = undef,
   $ssl_stapling                 = false,
@@ -320,7 +324,8 @@ define nginx::resource::vhost (
     fail('$ipv6_listen_ip must be a string or array.')
   }
   if is_string($ipv6_listen_port) {
-    warning('DEPRECATION: String $ipv6_listen_port must be converted to an integer. Integer string support will be removed in a future release.')
+    warning("DEPRECATION: String ${ipv6_listen_port} must be converted to an integer. \
+            Integer string support will be removed in a future release.")
   }
   elsif !is_integer($ipv6_listen_port) {
     fail('$ipv6_listen_port must be an integer.')
@@ -588,10 +593,10 @@ define nginx::resource::vhost (
   }
 
   concat { $config_file:
-    owner  => $owner,
-    group  => $group,
-    mode   => $mode,
-    notify => Class['::nginx::service'],
+    owner   => $owner,
+    group   => $group,
+    mode    => $mode,
+    notify  => Class['::nginx::service'],
     require => File[$vhost_dir],
   }
 

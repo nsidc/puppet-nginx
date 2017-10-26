@@ -1,6 +1,6 @@
 require: rubocop-rspec
 AllCops:
-  TargetRubyVersion: 1.9
+  DisplayCopNames: true
   Include:
     - ./**/*.rb
   Exclude:
@@ -8,6 +8,8 @@ AllCops:
     - .vendor/**/*
     - pkg/**/*
     - spec/fixtures/**/*
+    - Gemfile
+    - Rakefile
 Lint/ConditionPosition:
   Enabled: True
 
@@ -298,7 +300,7 @@ Style/EmptyLiteral:
 Metrics/LineLength:
   Enabled: False
 
-Style/MethodCallParentheses:
+Style/MethodCallWithoutArgsParentheses:
   Enabled: True
 
 Style/MethodDefParentheses:
@@ -412,7 +414,7 @@ Style/NumericLiterals:
 Style/OneLineConditional:
   Enabled: True
 
-Style/OpMethod:
+Style/BinaryOperatorParameterName:
   Enabled: True
 
 Style/ParenthesesAroundCondition:
@@ -484,6 +486,9 @@ Style/MultilineBlockLayout:
 Metrics/AbcSize:
   Enabled: False
 
+Metrics/BlockLength:
+  Enabled: False
+
 # 'Complexity' is very relative
 Metrics/PerceivedComplexity:
   Enabled: False
@@ -505,4 +510,13 @@ RSpec/ExampleLength:
   Enabled: False
 
 RSpec/NamedSubject:
+  Enabled: False
+
+RSpec/NestedGroups:
+  Enabled:  False
+
+RSpec/MultipleExpectations:
+  Enabled: False
+
+Style/FormatStringToken:
   Enabled: False

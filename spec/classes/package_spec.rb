@@ -21,6 +21,7 @@ describe 'nginx::package' do
 
     context 'package_source => nginx-mainline' do
       let(:params) { { package_source: 'nginx-mainline' } }
+
       it do
         is_expected.to contain_yumrepo('nginx-release').with(
           'baseurl' => "http://nginx.org/packages/mainline/#{operatingsystem == 'CentOS' ? 'centos' : 'rhel'}/6/$basearch/"
@@ -31,6 +32,7 @@ describe 'nginx::package' do
     context 'manage_repo => false' do
       let(:facts) { { operatingsystem: operatingsystem, osfamily: 'RedHat', operatingsystemmajrelease: '7' } }
       let(:params) { { manage_repo: false } }
+
       it { is_expected.to contain_package('nginx') }
       it { is_expected.not_to contain_yumrepo('nginx-release') }
     end
@@ -55,14 +57,15 @@ describe 'nginx::package' do
     end
   end
 
-  shared_examples 'debian' do |operatingsystem, lsbdistcodename, lsbdistid, operatingsystemmajrelease|
+  shared_examples 'debian' do |os, lsbdistcodename, lsbdistid, osmajrelease|
     let(:facts) do
       {
-        operatingsystem: operatingsystem,
-        operatingsystemmajrelease: operatingsystemmajrelease,
+        os: { name: os, release: { full: '16.04' }},
+        osmajrelease: osmajrelease,
         osfamily: 'Debian',
         lsbdistcodename: lsbdistcodename,
-        lsbdistid: lsbdistid
+        lsbdistid: lsbdistid,
+        operatingsystem: os
       }
     end
 
@@ -71,7 +74,7 @@ describe 'nginx::package' do
       it { is_expected.not_to contain_package('passenger') }
       it do
         is_expected.to contain_apt__source('nginx').with(
-          'location'   => "http://nginx.org/packages/#{operatingsystem.downcase}",
+          'location'   => "http://nginx.org/packages/#{os.downcase}",
           'repos'      => 'nginx',
           'key'        => '573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62'
         )
@@ -82,15 +85,17 @@ describe 'nginx::package' do
 
     context 'package_source => nginx-mainline' do
       let(:params) { { package_source: 'nginx-mainline' } }
+
       it do
         is_expected.to contain_apt__source('nginx').with(
-          'location' => "http://nginx.org/packages/mainline/#{operatingsystem.downcase}"
+          'location' => "http://nginx.org/packages/mainline/#{os.downcase}"
         )
       end
     end
 
     context "package_source => 'passenger'" do
       let(:params) { { package_source: 'passenger' } }
+
       it { is_expected.to contain_package('nginx') }
       it { is_expected.to contain_package('passenger') }
       it do
@@ -104,6 +109,7 @@ describe 'nginx::package' do
 
     context 'manage_repo => false' do
       let(:params) { { manage_repo: false } }
+
       it { is_expected.to contain_package('nginx') }
       it { is_expected.not_to contain_apt__source('nginx') }
       it { is_expected.not_to contain_package('passenger') }
@@ -116,12 +122,12 @@ describe 'nginx::package' do
   end
 
   context 'debian' do
-    it_behaves_like 'debian', 'Debian', 'wheezy', 'Debian', '6'
     it_behaves_like 'debian', 'Ubuntu', 'precise', 'Ubuntu', '12.04'
   end
 
   context 'other' do
-    let(:facts) { { operatingsystem: 'xxx', osfamily: 'linux' } }
+    let(:facts) { { os: 'xxx', osfamily: 'linux' } }
+
     it { is_expected.to contain_package('nginx') }
   end
 end

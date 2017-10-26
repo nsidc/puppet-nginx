@@ -186,7 +186,8 @@ class nginx::config(
   }
 
   validate_string($nginx_error_log)
-  validate_re($nginx_error_log_severity,['debug','info','notice','warn','error','crit','alert','emerg'],'$nginx_error_log_severity must be debug, info, notice, warn, error, crit, alert or emerg')
+  validate_re($nginx_error_log_severity,['debug','info','notice','warn','error','crit','alert','emerg'],
+    '$nginx_error_log_severity must be debug, info, notice, warn, error, crit, alert or emerg')
   validate_string($http_access_log)
   validate_string($proxy_headers_hash_bucket_size)
   validate_bool($super_user)

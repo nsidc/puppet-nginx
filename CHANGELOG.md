@@ -1,4 +1,9 @@
 # Change Log
+## 2017-10-25 Release v0.4.1
+
+- Linted ruby files and puppet manifests
+- Made broken tests work
+- Add CircleCI for running puppet parser validation, linting, and release checks.
 
 ## 2016-09-02 Release [v0.4.0](https://github.com/voxpupuli/puppet-nginx/tree/v0.4.0)
 [Full Changelog](https://github.com/voxpupuli/puppet-nginx/compare/v0.3.0...v0.4.0)

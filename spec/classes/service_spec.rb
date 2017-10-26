@@ -32,6 +32,7 @@ describe 'nginx::service' do
         service_name: 'nginx'
       }
     end
+
     it { is_expected.to contain_service('nginx').with_restart('/etc/init.d/nginx reload') }
 
     context "when service_restart => 'a restart command'" do
@@ -43,6 +44,7 @@ describe 'nginx::service' do
           service_name: 'nginx'
         }
       end
+
       it { is_expected.to contain_service('nginx').with_restart('a restart command') }
     end
   end
@@ -53,6 +55,7 @@ describe 'nginx::service' do
         service_name: 'nginx14'
       }
     end
+
     it { is_expected.to contain_service('nginx').with_name('nginx14') }
   end
 
@@ -62,6 +65,7 @@ describe 'nginx::service' do
         service_manage: false
       }
     end
+
     it { is_expected.not_to contain_service('nginx') }
   end
 end
