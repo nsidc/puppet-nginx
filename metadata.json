@@ -9,11 +9,11 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.2.0 <5.0.0"
+      "version_requirement": ">= 4.2.0 <7.0.0"
     },
     {
       "name": "puppetlabs/apt",
-      "version_requirement": ">= 1.8.0 <3.0.0"
+      "version_requirement": ">= 1.8.0 <8.0.0"
     },
     {
       "name": "puppetlabs/concat",
@@ -23,7 +23,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 3.0.0 < 5.0.0"
+      "version_requirement": ">= 3.0.0 < 8.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -67,9 +67,9 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "14.04",
-        "12.04",
-        "10.04"
+        "22.04",
+        "20.04",
+        "18.04"
       ]
     }
   ]
