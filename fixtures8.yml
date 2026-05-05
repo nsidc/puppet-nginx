@@ -1,0 +1,13 @@
+fixtures:
+  symlinks:
+    nginx: "#{source_dir}"
+  forge_modules:
+    apt:
+      repo: "puppetlabs/apt"
+      ref: "<12.0.0"
+    concat:
+      repo: "puppetlabs/concat"
+      ref: "9.1.0"
+    stdlib:
+      repo: "puppetlabs/stdlib"
+      ref: "<10.0.0"

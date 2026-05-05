@@ -1,5 +1,5 @@
 {
-    "name": "jfryman/puppet-nginx",
+    "name": "nsidc/puppet-nginx",
     "type": "project",
     "description": "Puppet module for nginx installation",
     "keywords": ["puppet", "nginx"],

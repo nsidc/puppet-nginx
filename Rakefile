@@ -3,13 +3,11 @@ require 'puppet_blacksmith/rake_tasks'
 require 'voxpupuli/release/rake_tasks'
 require 'puppet-strings/tasks'
 
-if RUBY_VERSION >= '2.3.0'
-  require 'rubocop/rake_task'
+require 'rubocop/rake_task'
 
-  RuboCop::RakeTask.new(:rubocop) do |task|
-    # These make the rubocop experience maybe slightly less terrible
-    task.options = ['-D', '-S', '-E']
-  end
+RuboCop::RakeTask.new(:rubocop) do |task|
+  # These make the rubocop experience maybe slightly less terrible
+  task.options = ['-D', '-S', '-E']
 end
 
 PuppetLint.configuration.log_format = '%{path}:%{linenumber}:%{check}:%{KIND}:%{message}'
