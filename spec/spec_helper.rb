@@ -3,6 +3,8 @@ require 'rspec-puppet-facts'
 include RspecPuppetFacts
 
 RSpec.configure do |c|
+  c.mock_with :mocha
+
   default_facts = {
     puppetversion: Puppet.version,
     facterversion: Facter.version

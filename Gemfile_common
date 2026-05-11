@@ -14,6 +14,7 @@ group :test do
   gem 'json_pure', '<= 2.8.1',                                      require: false if RUBY_VERSION < '2.0.0'
   gem 'metadata-json-lint',                                         require: false
   gem 'puppet-blacksmith',                                          require: false
+  gem 'puppet-lint',                                                require: false
   gem 'puppet-lint-absolute_classname-check',                       require: false
   gem 'puppet-lint-leading_zero-check',                             require: false
   gem 'puppet-lint-trailing_comma-check',                           require: false

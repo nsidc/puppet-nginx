@@ -14,19 +14,19 @@
 #
 # This class file is not called directly
 class nginx::package(
-  $package_name   = $::nginx::params::package_name,
+  $package_name   = $nginx::params::package_name,
   $package_source = 'nginx',
   $package_ensure = 'present',
   $package_flavor = undef,
-  $manage_repo    = $::nginx::params::manage_repo,
-) inherits ::nginx::params {
+  $manage_repo    = $nginx::params::manage_repo,
+) inherits nginx::params {
 
   anchor { 'nginx::package::begin': }
   anchor { 'nginx::package::end': }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'redhat': {
-      class { '::nginx::package::redhat':
+      class { 'nginx::package::redhat':
         manage_repo    => $manage_repo,
         package_source => $package_source,
         package_ensure => $package_ensure,
@@ -36,7 +36,7 @@ class nginx::package(
       }
     }
     'debian': {
-      class { '::nginx::package::debian':
+      class { 'nginx::package::debian':
         package_name   => $package_name,
         package_source => $package_source,
         package_ensure => $package_ensure,

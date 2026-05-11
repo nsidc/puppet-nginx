@@ -40,24 +40,30 @@
 #    upstream_cfg_prepend => $my_config,
 #  }
 define nginx::resource::upstream (
-  $members = undef,
-  $ensure = 'present',
-  $upstream_cfg_prepend = undef,
+  Optional[Array] $members = undef,
+  Enum['present', 'absent'] $ensure = 'present',
+  Optional[Hash] $upstream_cfg_prepend = undef,
   $upstream_fail_timeout = '10s',
   $upstream_max_fails = undef,
-  $upstream_context = 'http',
+  Enum['http', 'stream'] $upstream_context = 'http',
 ) {
 
-  if $members != undef {
-    validate_array($members)
-  }
-  validate_re($ensure, '^(present|absent)$',
-    "${ensure} is not supported for ensure. Allowed values are 'present' and 'absent'.")
-  validate_re($upstream_context, '^(http|stream)$',
-      "${upstream_context} is not supported for upstream_context. Allowed values are 'http' and 'stream'.")
-  if ($upstream_cfg_prepend != undef) {
-    validate_hash($upstream_cfg_prepend)
-  }
+  # if $members != undef {
+  #   validate_array($members)
+  # }
+  # validate_re($ensure, '^(present|absent)$',
+  #   "${ensure} is not supported for ensure. Allowed values are 'present' and 'absent'.")
+  # if $ensure !~ /^(present|absent)$/ {
+  #   fail("${ensure} is not supported for ensure. Allowed values are 'present' and 'absent'.")
+  # }
+  # validate_re($upstream_context, '^(http|stream)$',
+  #     "${upstream_context} is not supported for upstream_context. Allowed values are 'http' and 'stream'.")
+  # if $upstream_context !~ /^(http|stream)$/ {
+  #   fail("${upstream_context} is not supported for upstream_context. Allowed values are 'http' and 'stream'.")
+  # }
+  # if ($upstream_cfg_prepend != undef) {
+  #   validate_hash($upstream_cfg_prepend)
+  # }
 
   $root_group = $::nginx::config::root_group
 
@@ -79,7 +85,7 @@ define nginx::resource::upstream (
 
   concat { "${::nginx::config::conf_dir}/${conf_dir_real}/${name}-upstream.conf":
     ensure => $ensure_real,
-    notify => Class['::nginx::service'],
+    notify => Class['nginx::service'],
   }
 
   # Uses: $name, $upstream_cfg_prepend
@@ -97,7 +103,7 @@ define nginx::resource::upstream (
       content => template('nginx/conf.d/upstream_members.erb'),
     }
   } else {
-    class { '::nginx::resource::upstream::collect':
+    class { 'nginx::resource::upstream::collect':
       # Collect exported members
       upstream_name => $name,
     }

@@ -10,7 +10,7 @@ RuboCop::RakeTask.new(:rubocop) do |task|
   task.options = ['-D', '-S', '-E']
 end
 
-PuppetLint.configuration.log_format = '%{path}:%{linenumber}:%{check}:%{KIND}:%{message}'
+PuppetLint.configuration.log_format = '%{path}:%{line}:%{check}:%{KIND}:%{message}'
 PuppetLint.configuration.send('relative')
 
 exclude_paths = %w[
@@ -18,6 +18,7 @@ exclude_paths = %w[
   vendor/**/*
   .vendor/**/*
   spec/**/*
+  oldexamples/**/*
 ]
 PuppetLint.configuration.ignore_paths = exclude_paths
 PuppetSyntax.exclude_paths = exclude_paths

@@ -53,27 +53,30 @@
 
 
 define nginx::resource::geo (
-  $networks,
-  $default         = undef,
-  $ensure          = 'present',
-  $ranges          = false,
-  $address         = undef,
-  $delete          = undef,
-  $proxies         = undef,
-  $proxy_recursive = undef
+  Hash $networks,
+  Optional[String] $default         = undef,
+  Enum['present', 'absent'] $ensure          = 'present',
+  Boolean $ranges          = false,
+  Optional[String] $address         = undef,
+  Optional[String] $delete          = undef,
+  Optional[Array] $proxies         = undef,
+  Optional[Boolean] $proxy_recursive = undef
 ) {
 
-  validate_hash($networks)
-  validate_bool($ranges)
-  validate_re($ensure, '^(present|absent)$',
-    "Invalid ensure value '${ensure}'. Expected 'present' or 'absent'")
-  if ($default != undef) { validate_string($default) }
-  if ($address != undef) { validate_string($address) }
-  if ($delete != undef) { validate_string($delete) }
-  if ($proxies != undef) { validate_array($proxies) }
-  if ($proxy_recursive != undef) { validate_bool($proxy_recursive) }
+  # validate_hash($networks)
+  # validate_bool($ranges)
+  # validate_re($ensure, '^(present|absent)$',
+  #   "Invalid ensure value '${ensure}'. Expected 'present' or 'absent'")
+  # if $ensure !~ /^(present|absent)$/ {
+  #   fail("Invalid ensure value '${ensure}'. Expected 'present' or 'absent'")
+  # }
+  # if ($default != undef) { validate_string($default) }
+  # if ($address != undef) { validate_string($address) }
+  # if ($delete != undef) { validate_string($delete) }
+  # if ($proxies != undef) { validate_array($proxies) }
+  # if ($proxy_recursive != undef) { validate_bool($proxy_recursive) }
 
-  $root_group = $::nginx::config::root_group
+  $root_group = $nginx::config::root_group
 
   $ensure_real = $ensure ? {
     'absent' => 'absent',
@@ -86,9 +89,9 @@ define nginx::resource::geo (
     mode  => '0644',
   }
 
-  file { "${::nginx::config::conf_dir}/conf.d/${name}-geo.conf":
+  file { "${nginx::config::conf_dir}/conf.d/${name}-geo.conf":
     ensure  => $ensure_real,
     content => template('nginx/conf.d/geo.erb'),
-    notify  => Class['::nginx::service'],
+    notify  => Class['nginx::service'],
   }
 }

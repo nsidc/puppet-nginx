@@ -14,16 +14,16 @@
 #
 # This class file is not called directly
 class nginx::package::redhat (
-  $manage_repo    = true,
-  $package_ensure = 'present',
-  $package_name   = 'nginx',
-  $package_source = 'nginx-stable',
+  Boolean $manage_repo    = true,
+  String $package_ensure = 'present',
+  String $package_name   = 'nginx',
+  String $package_source = 'nginx-stable',
 ) {
 
   #Install the CentOS-specific packages on that OS, otherwise assume it's a RHEL
   #clone and provide the Red Hat-specific package. This comes into play when not
   #on RHEL or CentOS and $manage_repo is set manually to 'true'.
-  if $::operatingsystem == 'centos' {
+  if $facts['os']['name'] == 'centos' {
     $_os = 'centos'
   } else {
     $_os = 'rhel'
@@ -33,7 +33,7 @@ class nginx::package::redhat (
     case $package_source {
       'nginx', 'nginx-stable': {
         yumrepo { 'nginx-release':
-          baseurl  => "http://nginx.org/packages/${_os}/${::operatingsystemmajrelease}/\$basearch/",
+          baseurl  => "http://nginx.org/packages/${_os}/${$facts['os']['release']['major']}/\$basearch/",
           descr    => 'nginx repo',
           enabled  => '1',
           gpgcheck => '1',
@@ -44,7 +44,7 @@ class nginx::package::redhat (
       }
       'nginx-mainline': {
         yumrepo { 'nginx-release':
-          baseurl  => "http://nginx.org/packages/mainline/${_os}/${::operatingsystemmajrelease}/\$basearch/",
+          baseurl  => "http://nginx.org/packages/mainline/${_os}/${$facts['os']['release']['major']}/\$basearch/",
           descr    => 'nginx repo',
           enabled  => '1',
           gpgcheck => '1',

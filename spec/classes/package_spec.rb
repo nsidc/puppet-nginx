@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe 'nginx::package' do
   shared_examples 'redhat' do |operatingsystem|
-    let(:facts) { { operatingsystem: operatingsystem, osfamily: 'RedHat', operatingsystemmajrelease: '6' } }
+    # let(:facts) { operatingsystem: operatingsystem, osfamily: 'RedHat', operatingsystemmajrelease: '6' }
+    let(:facts) { { os: { name: operatingsystem, family: 'Redhat', release: { major: '6' } } } }
     context 'using defaults' do
       it { is_expected.to contain_package('nginx') }
       it do
@@ -30,7 +31,8 @@ describe 'nginx::package' do
     end
 
     context 'manage_repo => false' do
-      let(:facts) { { operatingsystem: operatingsystem, osfamily: 'RedHat', operatingsystemmajrelease: '7' } }
+      # let(:facts) { { operatingsystem: operatingsystem, osfamily: 'RedHat', operatingsystemmajrelease: '7' } }
+      let(:facts) { { os: { name: operatingsystem, family: 'Redhat', release: { major: '7' } } } }
       let(:params) { { manage_repo: false } }
 
       it { is_expected.to contain_package('nginx') }
@@ -38,7 +40,8 @@ describe 'nginx::package' do
     end
 
     context 'operatingsystemmajrelease = 5' do
-      let(:facts) { { operatingsystem: operatingsystem, osfamily: 'RedHat', operatingsystemmajrelease: '5' } }
+      # let(:facts) { { operatingsystem: operatingsystem, osfamily: 'RedHat', operatingsystemmajrelease: '5' } }
+      let(:facts) { { os: { name: operatingsystem, family: 'Redhat', release: { major: '5' } } } }
       it { is_expected.to contain_package('nginx') }
       it do
         is_expected.to contain_yumrepo('nginx-release').with(
@@ -48,7 +51,8 @@ describe 'nginx::package' do
     end
 
     describe 'installs the requested package version' do
-      let(:facts) { { operatingsystem: 'redhat', osfamily: 'redhat', operatingsystemmajrelease: '7' } }
+      # let(:facts) { { operatingsystem: 'redhat', osfamily: 'redhat', operatingsystemmajrelease: '7' } }
+      let(:facts) { { os: { name: 'redhat', family: 'Redhat', release: { major: '7' } } } }
       let(:params) { { package_ensure: '3.0.0' } }
 
       it 'installs 3.0.0 exactly' do
@@ -60,12 +64,23 @@ describe 'nginx::package' do
   shared_examples 'debian' do |os, lsbdistcodename, lsbdistid, osmajrelease|
     let(:facts) do
       {
-        os: { name: os, release: { full: '16.04' }},
-        osmajrelease: osmajrelease,
-        osfamily: 'Debian',
-        lsbdistcodename: lsbdistcodename,
-        lsbdistid: lsbdistid,
-        operatingsystem: os
+        os: {
+          name: os,
+          family: 'Debian',
+          distro: {
+            codename: lsbdistcodename,
+            id: lsbdistid
+          },
+          release: {
+            full: '16.04',
+            major: osmajrelease
+          }
+        },
+        # osmajrelease: osmajrelease,
+        # osfamily: 'Debian',
+        # lsbdistcodename: lsbdistcodename,
+        # lsbdistid: lsbdistid,
+        # operatingsystem: os
       }
     end
 
@@ -126,7 +141,8 @@ describe 'nginx::package' do
   end
 
   context 'other' do
-    let(:facts) { { os: 'xxx', osfamily: 'linux' } }
+    # let(:facts) { { os: 'xxx', osfamily: 'linux' } }
+    let(:facts) { { os: { family: 'linux' } } }
 
     it { is_expected.to contain_package('nginx') }
   end

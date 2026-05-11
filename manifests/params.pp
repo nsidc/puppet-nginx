@@ -12,7 +12,7 @@ class nginx::params {
     'package_name' => 'nginx',
     'manage_repo'  => false,
   }
-  case $::osfamily {
+  case $facts['os']['family'] {
     'ArchLinux': {
       $_module_os_overrides = {
         'pid'         => false,
@@ -20,8 +20,8 @@ class nginx::params {
       }
     }
     'Debian': {
-      if ($::operatingsystem == 'ubuntu' and $::lsbdistcodename in ['lucid', 'precise', 'trusty'])
-      or ($::operatingsystem == 'debian' and $::operatingsystemmajrelease in ['6', '7', '8']) {
+      if ($facts['os']['name'] == 'ubuntu' and $facts['os']['distro']['codename'] in ['lucid', 'precise', 'trusty'])
+      or ($facts['os']['name'] == 'debian' and $facts['os']['release']['major'] in ['6', '7', '8']) {
         $_module_os_overrides = {
           'manage_repo' => true,
           'daemon_user' => 'www-data',
@@ -45,7 +45,7 @@ class nginx::params {
       }
     }
     'RedHat': {
-      if ($::operatingsystem in ['RedHat', 'CentOS'] and $::operatingsystemmajrelease in ['5', '6', '7']) {
+      if ($facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['5', '6', '7']) {
         $_module_os_overrides = {
           'manage_repo' => true,
         }
@@ -68,8 +68,8 @@ class nginx::params {
       }
     }
     default: {
-      ## For cases not covered in $::osfamily
-      case $::operatingsystem {
+      ## For cases not covered in $facts['os']['family']
+      case $facts['os']['name'] {
         'SmartOS': {
           $_module_os_overrides = {
             'conf_dir'    => '/usr/local/etc/nginx',
@@ -81,7 +81,8 @@ class nginx::params {
     }
   }
 
-  $_module_parameters = merge($_module_defaults, $_module_os_overrides)
+  # $_module_parameters = merge($_module_defaults, $_module_os_overrides)
+  $_module_parameters = $_module_defaults + $_module_os_overrides
   ### END Operating System Configuration
 
   ### Referenced Variables
