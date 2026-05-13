@@ -4,7 +4,8 @@ jobs:
   test-puppet8: &test_setup
     working_directory: ~/puppet-nsidc-jenkins
     docker:
-      - image: ruby:3.4-bookworm
+#      - image: ruby:3.4-bookworm
+      - image: ruby:3.2-trixie
         environment:
           BUNDLE_GEMFILE: Gemfile8
     steps:
