@@ -13,8 +13,11 @@ jobs:
           command: apt-get install -y git
       - checkout
       - run:
+          name: Set bundle path
+          command: bundle config set path 'vendor/bundle'
+      - run:
           name: Install RubyGem dependencies
-          command: bundle install --path=vendor/bundle --jobs=4 --retry=3
+          command: bundle install --jobs=4 --retry=3
       - run:
           name: Linter and Parser
           command: bundle exec rake lint
