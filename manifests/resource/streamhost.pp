@@ -49,66 +49,27 @@
 #    ensure   => present,
 #  }
 define nginx::resource::streamhost (
-  Enum['present', 'absent'] $ensure                       = 'present',
-  Variant[Array, String] $listen_ip                    = '*',
-  Integer $listen_port                  = 80,
-  Optional[String] $listen_options               = undef,
-  Boolean $ipv6_enable                  = false,
-  Variant[Array, String] $ipv6_listen_ip               = '::',
-  Integer $ipv6_listen_port             = 80,
-  String $ipv6_listen_options          = 'default ipv6only=on',
-  Optional[String] $proxy                        = undef,
-  String $proxy_read_timeout           = $::nginx::config::proxy_read_timeout,
-  $proxy_connect_timeout        = $::nginx::config::proxy_connect_timeout,
-  Array $resolver                     = [],
-  Array $server_name                  = [$name],
-  Optional[Variant[Array, String]] $raw_prepend                  = undef,
-  Optional[Variant[Array, String]] $raw_append                   = undef,
-  String $owner                        = $::nginx::config::global_owner,
-  String $group                        = $::nginx::config::global_group,
-  String $mode                         = $::nginx::config::global_mode,
+  Enum['present', 'absent'] $ensure             = 'present',
+  Variant[Array, String] $listen_ip             = '*',
+  Integer $listen_port                          = 80,
+  Optional[String] $listen_options              = undef,
+  Boolean $ipv6_enable                          = false,
+  Variant[Array, String] $ipv6_listen_ip        = '::',
+  Integer $ipv6_listen_port                     = 80,
+  String $ipv6_listen_options                   = 'default ipv6only=on',
+  Optional[String] $proxy                       = undef,
+  String $proxy_read_timeout                    = $::nginx::config::proxy_read_timeout,
+  $proxy_connect_timeout                        = $::nginx::config::proxy_connect_timeout,
+  Array $resolver                               = [],
+  Array $server_name                            = [$name],
+  Optional[Variant[Array, String]] $raw_prepend = undef,
+  Optional[Variant[Array, String]] $raw_append  = undef,
+  String $owner                                 = $::nginx::config::global_owner,
+  String $group                                 = $::nginx::config::global_group,
+  String $mode                                  = $::nginx::config::global_mode,
 ) {
 
-  # validate_re($ensure, '^(present|absent)$',
-  #   "${ensure} is not supported for ensure. Allowed values are 'present' and 'absent'.")
-  # unless $ensure =~ Enum['present', 'absent'] {
-  #   "${ensure} is not supported for ensure. Allowed values are 'present' and 'absent'."
-  # }
-  # if !(is_array($listen_ip) or $listen_ip =~ String) {
-  #   fail('$listen_ip must be a string or array.')
-  # }
-  # if $listen_port =~ String {
-  #   warning('DEPRECATION: String $listen_port must be converted to an integer. Integer string support will be removed in a future release.')
-  # }
-  # elsif !nginx::is_integer($listen_port) {
-  #   fail('$listen_port must be an integer.')
-  # }
-  # if ($listen_options != undef) {
-  #   validate_string($listen_options)
-  # }
-  # validate_bool($ipv6_enable)
-  # if !(is_array($ipv6_listen_ip) or $ipv6_listen_ip =~ String) {
-  #   fail('$ipv6_listen_ip must be a string or array.')
-  # }
-  # if $ipv6_listen_port =~ String {
-  #   warning("DEPRECATION: String ${ipv6_listen_port} must be converted to an integer. \
-  #           Integer string support will be removed in a future release.")
-  # }
-  # elsif !nginx::is_integer($ipv6_listen_port) {
-  #   fail('$ipv6_listen_port must be an integer.')
-  # }
-  # validate_string($ipv6_listen_options)
-  #
-  # validate_string($proxy_read_timeout)
-  #
-  # validate_array($resolver)
-  # validate_array($server_name)
-
-  # validate_string($owner)
-  # validate_string($group)
-  # validate_re($mode, '^\d{4}$',
-  #   "${mode} is not valid. It should be 4 digits (0644 by default).")
-  if $mode !~ /^\d{4}$/ {
+    if $mode !~ /^\d{4}$/ {
     fail("${mode} is not valid. It should be 4 digits (0644 by default).")
   }
 

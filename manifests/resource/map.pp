@@ -44,24 +44,13 @@
 define nginx::resource::map (
   String $string,
   Hash $mappings,
-  Optional[String] $default    = undef,
-  Enum['present', 'absent'] $ensure     = 'present',
-  Boolean $hostnames  = false
+  Optional[String] $default         = undef,
+  Enum['present', 'absent'] $ensure = 'present',
+  Boolean $hostnames                = false
 ) {
-  # validate_string($string)
-  # validate_re($string, '^.{2,}$',
-  #   "Invalid string value [${string}]. Expected a minimum of 2 characters.")
   if $string.length < 2 {
     fail("Invalid string value [${string}]. Expected a minimum of 2 characters.")
   }
-  # validate_hash($mappings)
-  # validate_bool($hostnames)
-  # validate_re($ensure, '^(present|absent)$',
-  #   "Invalid ensure value '${ensure}'. Expected 'present' or 'absent'")
-  # if $ensure !~ /^(present|absent)$/ {
-  #   fail("Invalid ensure value '${ensure}'. Expected 'present' or 'absent'")
-  # }
-  # if ($default != undef) { validate_string($default) }
 
   $root_group = $::nginx::config::root_group
 

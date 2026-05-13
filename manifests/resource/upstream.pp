@@ -40,30 +40,13 @@
 #    upstream_cfg_prepend => $my_config,
 #  }
 define nginx::resource::upstream (
-  Optional[Array] $members = undef,
-  Enum['present', 'absent'] $ensure = 'present',
-  Optional[Hash] $upstream_cfg_prepend = undef,
-  $upstream_fail_timeout = '10s',
-  $upstream_max_fails = undef,
+  Optional[Array] $members                 = undef,
+  Enum['present', 'absent'] $ensure        = 'present',
+  Optional[Hash] $upstream_cfg_prepend     = undef,
+  String $upstream_fail_timeout            = '10s',
+  $upstream_max_fails                      = undef,
   Enum['http', 'stream'] $upstream_context = 'http',
 ) {
-
-  # if $members != undef {
-  #   validate_array($members)
-  # }
-  # validate_re($ensure, '^(present|absent)$',
-  #   "${ensure} is not supported for ensure. Allowed values are 'present' and 'absent'.")
-  # if $ensure !~ /^(present|absent)$/ {
-  #   fail("${ensure} is not supported for ensure. Allowed values are 'present' and 'absent'.")
-  # }
-  # validate_re($upstream_context, '^(http|stream)$',
-  #     "${upstream_context} is not supported for upstream_context. Allowed values are 'http' and 'stream'.")
-  # if $upstream_context !~ /^(http|stream)$/ {
-  #   fail("${upstream_context} is not supported for upstream_context. Allowed values are 'http' and 'stream'.")
-  # }
-  # if ($upstream_cfg_prepend != undef) {
-  #   validate_hash($upstream_cfg_prepend)
-  # }
 
   $root_group = $::nginx::config::root_group
 

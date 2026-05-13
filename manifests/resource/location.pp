@@ -135,61 +135,61 @@
 #  }
 
 define nginx::resource::location (
-  Enum['present', 'absent'] $ensure               = present,
-  Boolean $internal             = false,
-  String $location             = $name,
-  Optional[String] $vhost                = undef,
-  Optional[String] $www_root             = undef,
-  Optional[String] $autoindex            = undef,
-  Array $index_files          = [
+  Enum['present', 'absent'] $ensure                  = present,
+  Boolean $internal                                  = false,
+  String $location                                   = $name,
+  Optional[String] $vhost                            = undef,
+  Optional[String] $www_root                         = undef,
+  Optional[String] $autoindex                        = undef,
+  Array $index_files                                 = [
     'index.html',
     'index.htm',
     'index.php'],
-  Optional[String] $proxy                = undef,
-  Optional[String] $proxy_redirect       = $::nginx::config::proxy_redirect,
-  String $proxy_read_timeout   = $::nginx::config::proxy_read_timeout,
-  String $proxy_connect_timeout = $::nginx::config::proxy_connect_timeout,
-  Array $proxy_set_header     = $::nginx::config::proxy_set_header,
-  Array $proxy_hide_header    = $::nginx::config::proxy_hide_header,
-  Optional[String] $fastcgi              = undef,
-  Optional[Hash] $fastcgi_param        = undef,
-  String $fastcgi_params       = "${::nginx::config::conf_dir}/fastcgi_params",
-  Optional[String] $fastcgi_script       = undef,
-  Optional[String] $fastcgi_split_path   = undef,
-  Optional[String] $uwsgi                = undef,
-  String $uwsgi_params         = "${nginx::config::conf_dir}/uwsgi_params",
-  Optional[String] $uwsgi_read_timeout   = undef,
-  Boolean $ssl                  = false,
-  Boolean $ssl_only             = false,
-  Optional[String] $location_alias       = undef,
-  Optional[Enum['any','all']] $location_satisfy     = undef,
-  Optional[Array] $location_allow       = undef,
-  Optional[Array] $location_deny        = undef,
-  $option               = undef,
-  Optional[Boolean] $stub_status          = undef,
-  Optional[Variant[Array, String]] $raw_prepend          = undef,
-  Optional[Variant[Array, String]] $raw_append           = undef,
-  Optional[Hash] $location_custom_cfg  = undef,
-  Optional[Hash] $location_cfg_prepend = undef,
-  Optional[Hash] $location_cfg_append  = undef,
-  Optional[Hash] $location_custom_cfg_prepend  = undef,
-  Optional[Hash] $location_custom_cfg_append   = undef,
-  Optional[Array] $include              = undef,
-  Optional[Array] $try_files            = undef,
-  Variant[Boolean, String] $proxy_cache          = false,
-  Optional[String] $proxy_cache_key      = undef,
-  Optional[String] $proxy_cache_use_stale = undef,
-  Variant[Boolean, Array, String] $proxy_cache_valid    = false,
-  Optional[String] $proxy_method         = undef,
-  Optional[String] $proxy_set_body       = undef,
-  Optional[Enum['on','off']] $proxy_buffering      = undef,
-  Optional[String] $auth_basic           = undef,
-  Optional[String] $auth_basic_user_file = undef,
-  Array $rewrite_rules        = [],
-  Integer $priority             = 500,
-  Boolean $mp4             = false,
-  Boolean $flv             = false,
-  Boolean $cors            = false
+  Optional[String] $proxy                            = undef,
+  Optional[String] $proxy_redirect                   = $::nginx::config::proxy_redirect,
+  String $proxy_read_timeout                         = $::nginx::config::proxy_read_timeout,
+  String $proxy_connect_timeout                      = $::nginx::config::proxy_connect_timeout,
+  Array $proxy_set_header                            = $::nginx::config::proxy_set_header,
+  Array $proxy_hide_header                           = $::nginx::config::proxy_hide_header,
+  Optional[String] $fastcgi                          = undef,
+  Optional[Hash] $fastcgi_param                      = undef,
+  String $fastcgi_params                             = "${::nginx::config::conf_dir}/fastcgi_params",
+  Optional[String] $fastcgi_script                   = undef,
+  Optional[String] $fastcgi_split_path               = undef,
+  Optional[String] $uwsgi                            = undef,
+  String $uwsgi_params                               = "${nginx::config::conf_dir}/uwsgi_params",
+  Optional[String] $uwsgi_read_timeout               = undef,
+  Boolean $ssl                                       = false,
+  Boolean $ssl_only                                  = false,
+  Optional[String] $location_alias                   = undef,
+  Optional[Enum['any','all']] $location_satisfy      = undef,
+  Optional[Array] $location_allow                    = undef,
+  Optional[Array] $location_deny                     = undef,
+  $option                                            = undef,
+  Optional[Boolean] $stub_status                     = undef,
+  Optional[Variant[Array, String]] $raw_prepend      = undef,
+  Optional[Variant[Array, String]] $raw_append       = undef,
+  Optional[Hash] $location_custom_cfg                = undef,
+  Optional[Hash] $location_cfg_prepend               = undef,
+  Optional[Hash] $location_cfg_append                = undef,
+  Optional[Hash] $location_custom_cfg_prepend        = undef,
+  Optional[Hash] $location_custom_cfg_append         = undef,
+  Optional[Array] $include                           = undef,
+  Optional[Array] $try_files                         = undef,
+  Variant[Boolean, String] $proxy_cache              = false,
+  Optional[String] $proxy_cache_key                  = undef,
+  Optional[String] $proxy_cache_use_stale            = undef,
+  Variant[Boolean, Array, String] $proxy_cache_valid = false,
+  Optional[String] $proxy_method                     = undef,
+  Optional[String] $proxy_set_body                   = undef,
+  Optional[Enum['on','off']] $proxy_buffering        = undef,
+  Optional[String] $auth_basic                       = undef,
+  Optional[String] $auth_basic_user_file             = undef,
+  Array $rewrite_rules                               = [],
+  Integer $priority                                  = 500,
+  Boolean $mp4                                       = false,
+  Boolean $flv                                       = false,
+  Boolean $cors                                      = false
 ) {
 
   $root_group = $::nginx::config::root_group
@@ -201,147 +201,14 @@ define nginx::resource::location (
     notify => Class['nginx::service'],
   }
 
-  # validate_re($ensure, '^(present|absent)$',
-  #   "${ensure} is not supported for ensure. Allowed values are 'present' and 'absent'.")
-  # if $ensure !~ /^(present|absent)$/ {
-  #   fail("${ensure} is not supported for ensure. Allowed values are 'present' and 'absent'.")
-  # }
-  # validate_string($location)
-  # if ($vhost != undef) {
-  #   validate_string($vhost)
-  # }
-  # if ($www_root != undef) {
-  #   validate_string($www_root)
-  # }
-  # if ($autoindex != undef) {
-  #   validate_string($autoindex)
-  # }
-  # validate_array($index_files)
-  # if ($proxy != undef) {
-  #   validate_string($proxy)
-  # }
-  # if ($proxy_redirect != undef) {
-  #   validate_string($proxy_redirect)
-  # }
-  # validate_string($proxy_read_timeout)
-  # validate_string($proxy_connect_timeout)
-  # validate_array($proxy_set_header)
-  # validate_array($proxy_hide_header)
-  # if ($fastcgi != undef) {
-  #   validate_string($fastcgi)
-  # }
-  # if ($fastcgi_param != undef) {
-  #   validate_hash($fastcgi_param)
-  # }
-  # validate_string($fastcgi_params)
-  # if ($fastcgi_script != undef) {
-  #   validate_string($fastcgi_script)
-  # }
-  # if ($fastcgi_split_path != undef) {
-  #   validate_string($fastcgi_split_path)
-  # }
-  # if ($uwsgi != undef) {
-  #   validate_string($uwsgi)
-  # }
-  # validate_string($uwsgi_params)
-  # if ($uwsgi_read_timeout != undef) {
-  #   validate_string($uwsgi_read_timeout)
-  # }
-  #
-  # validate_bool($internal)
-  #
-  # validate_bool($ssl)
-  # validate_bool($ssl_only)
-  # if ($location_alias != undef) {
-  #   validate_string($location_alias)
-  # }
-  # if ($location_satisfy != undef) {
-  #   validate_re($location_satisfy, '^(any|all)$',
-  #   "${$location_satisfy} is not supported for location_satisfy. Allowed values are 'any' and 'all'.")
-  # }
-  # if $location_satisfy != undef and $location_satisfy !~ /^(any|all)$/ {
-  #   fail("${$location_satisfy} is not supported for location_satisfy. Allowed values are 'any' and 'all'.")
-  # }
-  # if ($location_allow != undef) {
-  #   validate_array($location_allow)
-  # }
-  # if ($location_deny != undef) {
-  #   validate_array($location_deny)
-  # }
   if ($option != undef) {
     warning('The $option parameter has no effect and is deprecated.')
   }
-  # if ($stub_status != undef) {
-  #   validate_bool($stub_status)
-  # }
-  # if ($raw_prepend != undef) {
-  #   if (is_array($raw_prepend)) {
-  #     validate_array($raw_prepend)
-  #   } else {
-  #     validate_string($raw_prepend)
-  #   }
-  # }
-  # if ($raw_append != undef) {
-  #   if (is_array($raw_append)) {
-  #     validate_array($raw_append)
-  #   } else {
-  #     validate_string($raw_append)
-  #   }
-  # }
-  # if ($location_custom_cfg != undef) {
-  #   validate_hash($location_custom_cfg)
-  # }
-  # if ($location_cfg_prepend != undef) {
-  #   validate_hash($location_cfg_prepend)
-  # }
-  # if ($location_cfg_append != undef) {
-  #   validate_hash($location_cfg_append)
-  # }
-  # if ($include != undef) {
-  #   validate_array($include)
-  # }
-  # if ($try_files != undef) {
-  #   validate_array($try_files)
-  # }
-  # if ($proxy_cache != false) {
-  #   validate_string($proxy_cache)
-  # }
-  # if ($proxy_cache_key != undef) {
-  #   validate_string($proxy_cache_key)
-  # }
-  # if ($proxy_cache_use_stale != undef) {
-  #   validate_string($proxy_cache_use_stale)
-  # }
-  # if ($proxy_cache_valid != false) {
-  #   if !(is_array($proxy_cache_valid) or $proxy_cache_valid =~ String) {
-  #     fail('$proxy_cache_valid must be a string or an array or false.')
-  #   }
-  # }
+
   if ($proxy_cache_valid =~ Boolean and $proxy_cache_valid != false) {
     fail('$proxy_cache_valid must be a string or an array or false.')
   }
-  # if ($proxy_method != undef) {
-  #   validate_string($proxy_method)
-  # }
-  # if ($proxy_set_body != undef) {
-  #   validate_string($proxy_set_body)
-  # }
-  # if ($proxy_buffering != undef) {
-  #   validate_re($proxy_buffering, '^(on|off)$')
-  # }
-  # if $proxy_buffering != undef and $proxy_buffering !~ /^(on|off)$/ {
-  #   fail("${proxy_buffering} is not valid for $proxy_buffering; if set, it must be 'on' or 'off'")
-  # }
-  # if ($auth_basic != undef) {
-  #   validate_string($auth_basic)
-  # }
-  # if ($auth_basic_user_file != undef) {
-  #   validate_string($auth_basic_user_file)
-  # }
-  # if !nginx::is_integer($priority) {
-  #   fail('$priority must be an integer.')
-  # }
-  # validate_array($rewrite_rules)
+
   if (($priority + 0) < 401) or (($priority + 0) > 899) {
     fail('$priority must be in the range 401-899.')
   }

@@ -43,22 +43,22 @@
 #  }
 define nginx::resource::mailhost (
   Integer $listen_port,
-  String $ensure              = 'present',
-  Variant[Array, String] $listen_ip           = '*',
-  Optional[String] $listen_options      = undef,
-  Boolean $ipv6_enable         = false,
-  Variant[Array, String] $ipv6_listen_ip      = '::',
-  Integer $ipv6_listen_port    = 80,
-  String $ipv6_listen_options = 'default ipv6only=on',
-  Boolean $ssl                 = false,
-  Optional[String] $ssl_cert            = undef,
-  Optional[String] $ssl_key             = undef,
+  Enum['present', 'absent'] $ensure      = 'present',
+  Variant[Array, String] $listen_ip      = '*',
+  Optional[String] $listen_options       = undef,
+  Boolean $ipv6_enable                   = false,
+  Variant[Array, String] $ipv6_listen_ip = '::',
+  Integer $ipv6_listen_port              = 80,
+  String $ipv6_listen_options            = 'default ipv6only=on',
+  Boolean $ssl                           = false,
+  Optional[String] $ssl_cert             = undef,
+  Optional[String] $ssl_key              = undef,
   Optional[Integer] $ssl_port            = undef,
-  String $starttls            = 'off',
-  Optional[String] $protocol            = undef,
-  Optional[String] $auth_http           = undef,
-  String $xclient             = 'on',
-  Array $server_name         = [$name]
+  Enum['on','only','off'] $starttls      = 'off',
+  Optional[String] $protocol             = undef,
+  Optional[String] $auth_http            = undef,
+  String $xclient                        = 'on',  # should this be an ENUM?  Not sure if 'on' and 'off' are the only valids
+  Array $server_name                     = [$name]
 ) {
 
   $root_group = $::nginx::config::root_group
@@ -68,64 +68,6 @@ define nginx::resource::mailhost (
     group => $root_group,
     mode  => '0644',
   }
-
-  # if $listen_port =~ String {
-  #   warning('DEPRECATION: String $listen_port must be converted to an integer. Integer string support will be removed in a future release.')
-  # }
-  # elsif !nginx::is_integer($listen_port) {
-  #   fail('$listen_port must be an integer.')
-  # }
-  # validate_re($ensure, '^(present|absent)$',
-  #   "${ensure} is not supported for ensure. Allowed values are 'present' and 'absent'.")
-  if $ensure !~ /^(present|absent)$/ {
-    fail("${ensure} is not supported for ensure. Allowed values are 'present' and 'absent'.")
-  }
-  # if !(is_array($listen_ip) or $listen_ip =~ String) {
-  #   fail('$listen_ip must be a string or array.')
-  # }
-  # if ($listen_options != undef) {
-  #   validate_string($listen_options)
-  # }
-  # validate_bool($ipv6_enable)
-  # if !(is_array($ipv6_listen_ip) or $ipv6_listen_ip =~ String) {
-  #   fail('$ipv6_listen_ip must be a string or array.')
-  # }
-  if $ipv6_listen_port =~ String {
-    warning("DEPRECATION: String ${ipv6_listen_port} must be converted to an integer.\
-             Integer string support will be removed in a future release.")
-  }
-  elsif !nginx::is_integer($ipv6_listen_port) {
-    fail('$ipv6_listen_port must be an integer.')
-  }
-  # validate_string($ipv6_listen_options)
-  # validate_bool($ssl)
-  # if ($ssl_cert != undef) {
-  #   validate_string($ssl_cert)
-  # }
-  # if ($ssl_key != undef) {
-  #   validate_string($ssl_key)
-  # }
-  # if $ssl_port != undef {
-  #   if $ssl_port =~ String {
-  #     warning('DEPRECATION: String $ssl_port must be converted to an integer. Integer string support will be removed in a future release.')
-  #   }
-  #   elsif !nginx::is_integer($ssl_port) {
-  #     fail('$ssl_port must be an integer.')
-  #   }
-  # }
-  # validate_re($starttls, '^(on|only|off)$',
-  #   "${starttls} is not supported for starttls. Allowed values are 'on', 'only' and 'off'.")
-  if $starttls !~ /^(on|only|off)$/ {
-    fail("${starttls} is not supported for starttls. Allowed values are 'on', 'only' and 'off'.")
-  }
-  # if ($protocol != undef) {
-  #   validate_string($protocol)
-  # }
-  # if ($auth_http != undef) {
-  #   validate_string($auth_http)
-  # }
-  # validate_string($xclient)
-  # validate_array($server_name)
 
   $config_file = "${::nginx::config::conf_dir}/conf.mail.d/${name}.conf"
 

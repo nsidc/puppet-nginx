@@ -1,3 +1,0 @@
-eval_gemfile File.join(File.dirname(__FILE__), 'Gemfile_common')
-
-gem 'puppet', '~> 5.3'
