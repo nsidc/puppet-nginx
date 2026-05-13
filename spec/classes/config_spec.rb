@@ -644,7 +644,7 @@ describe 'nginx::config' do
     context 'when nginx_error_log_severity = invalid' do
       let(:params) { { nginx_error_log_severity: 'invalid' } }
 
-      it { expect { is_expected.to contain_class('nginx::config') }.to raise_error(Puppet::Error, %r{expects a match for Enum\[.*], got 'invalid'}) }
+      it { expect { is_expected.to contain_class('nginx::config') }.to raise_error(Puppet::Error, %r{expects a match for Enum\[.*\], got 'invalid'}) }
     end
   end
 end
