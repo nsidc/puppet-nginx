@@ -10,13 +10,3 @@ fixtures:
       repo: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
       ref: "v9.6.0"
     yumrepo_core: "https://github.com/puppetlabs/puppetlabs-yumrepo_core.git"
-#  forge_modules:
-#    apt:
-#      repo: "puppetlabs/apt"
-#      ref: "<12.0.0"
-#    concat:
-#      repo: "puppetlabs/concat"
-#      ref: "9.1.0"
-#    stdlib:
-#      repo: "puppetlabs/stdlib"
-#      ref: "<10.0.0"
