@@ -8,6 +8,7 @@ jobs:
       - image: ruby:3.2-trixie
         environment:
           BUNDLE_GEMFILE: Gemfile8
+          FIXTURES_YML: fixtures8.yml
     steps:
       - run:
           name: Install git
