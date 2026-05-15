@@ -298,3 +298,13 @@ web::nginx_ssl_with_redirect { 'sub-domain-name':
     backend_port => 9001,
   }
 ```
+
+## Testing
+
+There are some linting and unit tests done via CircleCI.  These tests can also be run
+locally with Docker:
+
+```
+docker-compose run lint
+docker-compose run test
+```
