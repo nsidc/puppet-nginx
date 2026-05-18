@@ -9,7 +9,7 @@ describe 'nginx::resource::mailhost' do
       ipv6_enable: true
     }
   end
-  let(:pre_condition) { ['include ::nginx::config'] }
+  let(:pre_condition) { ['include nginx::config', 'include nginx::service'] }
 
   describe 'os-independent items' do
     describe 'basic assumptions' do
@@ -202,7 +202,7 @@ describe 'nginx::resource::mailhost' do
         {
           title: 'should set the IPv4 SSL listen port',
           attr: 'ssl_port',
-          value: '45',
+          value: 45,
           match: '  listen       *:45;'
         },
         {
@@ -362,13 +362,10 @@ describe 'nginx::resource::mailhost' do
         it { is_expected.to contain_concat__fragment("#{title}-header") }
       end
 
-      context 'when listen_port != "ssl_port"' do
-        let :params do
-          default_params.merge(listen_port: 80,
-                               ssl_port: '443')
-        end
+      context 'when listen_port is a String' do
+        let(:params) { default_params.merge(listen_port: '80') }
 
-        it { is_expected.to contain_concat__fragment("#{title}-header") }
+        it { is_expected.to raise_error(Puppet::PreformattedError, %r{parameter 'listen_port' expects an Integer value, got String}) }
       end
 
       context 'when listen_port == ssl_port' do
@@ -380,13 +377,10 @@ describe 'nginx::resource::mailhost' do
         it { is_expected.not_to contain_concat__fragment("#{title}-header") }
       end
 
-      context 'when listen_port == "ssl_port"' do
-        let :params do
-          default_params.merge(listen_port: 80,
-                               ssl_port: '80')
-        end
+      context 'when ssl_port is a String' do
+        let(:params) { default_params.merge(ssl_port: '443') }
 
-        it { is_expected.not_to contain_concat__fragment("#{title}-header") }
+        it { is_expected.to raise_error(Puppet::PreformattedError, %r{parameter 'ssl_port' expects a value of type Undef or Integer, got String}) }
       end
 
       context 'when ssl => true' do

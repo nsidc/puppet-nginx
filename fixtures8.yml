@@ -1,0 +1,12 @@
+fixtures:
+  symlinks:
+    nginx: "#{source_dir}"
+  repositories:
+    apt: "https://github.com/puppetlabs/puppetlabs-apt.git"
+    concat:
+      repo: "https://github.com/puppetlabs/puppetlabs-concat.git"
+      ref: "v9.1.0"
+    stdlib:
+      repo: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
+      ref: "v9.6.0"
+    yumrepo_core: "https://github.com/puppetlabs/puppetlabs-yumrepo_core.git"

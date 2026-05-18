@@ -102,10 +102,10 @@ class nginx (
 
   ### START Package Configuration ###
   $package_ensure                 = present,
-  $package_name                   = $::nginx::params::package_name,
+  $package_name                   = $nginx::params::package_name,
   $package_source                 = 'nginx',
   $package_flavor                 = undef,
-  $manage_repo                    = $::nginx::params::manage_repo,
+  $manage_repo                    = $nginx::params::manage_repo,
   ### END Package Configuration ###
 
   ### START Service Configuation ###
@@ -126,7 +126,7 @@ class nginx (
   $nginx_vhosts                   = {},
   $nginx_vhosts_defaults          = {},
   ### END Hiera Lookups ###
-) inherits ::nginx::params {
+) inherits nginx::params {
 
   ### DEPRECATION WARNING ###
   ###
@@ -208,24 +208,24 @@ class nginx (
         $sites_available_owner or
         $sites_available_group or
         $sites_available_mode {
-          include ::nginx::notice::config
+          include nginx::notice::config
         }
 
   ### END DEPRECATION WARNING ###
 
-  class { '::nginx::package':
+  class { 'nginx::package':
     package_name   => $package_name,
     package_source => $package_source,
     package_ensure => $package_ensure,
     package_flavor => $package_flavor,
-    notify         => Class['::nginx::service'],
+    notify         => Class['nginx::service'],
     manage_repo    => $manage_repo,
   }
 
   ## This `if` statement is here in the event a user cannot use
   ## Hiera based parameter overrides. Will not be here in 1.0 release
-  if !defined(Class['::nginx::config']) {
-    class { '::nginx::config':
+  if !defined(Class['nginx::config']) {
+    class { 'nginx::config':
       client_body_buffer_size        => $client_body_buffer_size,
       client_body_temp_path          => $client_body_temp_path,
       client_max_body_size           => $client_max_body_size,
@@ -293,9 +293,9 @@ class nginx (
       sites_available_mode           => $sites_available_mode,
     }
   }
-  Class['::nginx::package'] -> Class['::nginx::config'] ~> Class['::nginx::service']
+  Class['nginx::package'] -> Class['nginx::config'] ~> Class['nginx::service']
 
-  class { '::nginx::service':
+  class { 'nginx::service':
     configtest_enable => $configtest_enable,
     service_ensure    => $service_ensure,
     service_restart   => $service_restart,
@@ -315,10 +315,10 @@ class nginx (
   # and preserve the relationship to the implementation classes through
   # a transitive relationship to the composite class.
   anchor{ 'nginx::begin':
-    before => Class['::nginx::package'],
-    notify => Class['::nginx::service'],
+    before => Class['nginx::package'],
+    notify => Class['nginx::service'],
   }
   anchor { 'nginx::end':
-    require => Class['::nginx::service'],
+    require => Class['nginx::service'],
   }
 }

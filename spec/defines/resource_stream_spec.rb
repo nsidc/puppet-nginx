@@ -16,7 +16,8 @@ describe 'nginx::resource::streamhost' do
   end
   let :pre_condition do
     [
-      'include ::nginx::config'
+      'include nginx::config',
+      'include nginx::service'
     ]
   end
 

@@ -42,23 +42,23 @@
 #    ssl_key     => '/tmp/server.pem',
 #  }
 define nginx::resource::mailhost (
-  $listen_port,
-  $ensure              = 'present',
-  $listen_ip           = '*',
-  $listen_options      = undef,
-  $ipv6_enable         = false,
-  $ipv6_listen_ip      = '::',
-  $ipv6_listen_port    = 80,
-  $ipv6_listen_options = 'default ipv6only=on',
-  $ssl                 = false,
-  $ssl_cert            = undef,
-  $ssl_key             = undef,
-  $ssl_port            = undef,
-  $starttls            = 'off',
-  $protocol            = undef,
-  $auth_http           = undef,
-  $xclient             = 'on',
-  $server_name         = [$name]
+  Integer $listen_port,
+  Enum['present', 'absent'] $ensure      = 'present',
+  Variant[Array, String] $listen_ip      = '*',
+  Optional[String] $listen_options       = undef,
+  Boolean $ipv6_enable                   = false,
+  Variant[Array, String] $ipv6_listen_ip = '::',
+  Integer $ipv6_listen_port              = 80,
+  String $ipv6_listen_options            = 'default ipv6only=on',
+  Boolean $ssl                           = false,
+  Optional[String] $ssl_cert             = undef,
+  Optional[String] $ssl_key              = undef,
+  Optional[Integer] $ssl_port            = undef,
+  Enum['on','only','off'] $starttls      = 'off',
+  Optional[String] $protocol             = undef,
+  Optional[String] $auth_http            = undef,
+  String $xclient                        = 'on',  # should this be an ENUM?  Not sure if 'on' and 'off' are the only valids
+  Array $server_name                     = [$name]
 ) {
 
   $root_group = $::nginx::config::root_group
@@ -69,63 +69,11 @@ define nginx::resource::mailhost (
     mode  => '0644',
   }
 
-  if is_string($listen_port) {
-    warning('DEPRECATION: String $listen_port must be converted to an integer. Integer string support will be removed in a future release.')
-  }
-  elsif !is_integer($listen_port) {
-    fail('$listen_port must be an integer.')
-  }
-  validate_re($ensure, '^(present|absent)$',
-    "${ensure} is not supported for ensure. Allowed values are 'present' and 'absent'.")
-  if !(is_array($listen_ip) or is_string($listen_ip)) {
-    fail('$listen_ip must be a string or array.')
-  }
-  if ($listen_options != undef) {
-    validate_string($listen_options)
-  }
-  validate_bool($ipv6_enable)
-  if !(is_array($ipv6_listen_ip) or is_string($ipv6_listen_ip)) {
-    fail('$ipv6_listen_ip must be a string or array.')
-  }
-  if is_string($ipv6_listen_port) {
-    warning("DEPRECATION: String ${ipv6_listen_port} must be converted to an integer.\
-             Integer string support will be removed in a future release.")
-  }
-  elsif !is_integer($ipv6_listen_port) {
-    fail('$ipv6_listen_port must be an integer.')
-  }
-  validate_string($ipv6_listen_options)
-  validate_bool($ssl)
-  if ($ssl_cert != undef) {
-    validate_string($ssl_cert)
-  }
-  if ($ssl_key != undef) {
-    validate_string($ssl_key)
-  }
-  if $ssl_port != undef {
-    if is_string($ssl_port) {
-      warning('DEPRECATION: String $ssl_port must be converted to an integer. Integer string support will be removed in a future release.')
-    }
-    elsif !is_integer($ssl_port) {
-      fail('$ssl_port must be an integer.')
-    }
-  }
-  validate_re($starttls, '^(on|only|off)$',
-    "${starttls} is not supported for starttls. Allowed values are 'on', 'only' and 'off'.")
-  if ($protocol != undef) {
-    validate_string($protocol)
-  }
-  if ($auth_http != undef) {
-    validate_string($auth_http)
-  }
-  validate_string($xclient)
-  validate_array($server_name)
-
   $config_file = "${::nginx::config::conf_dir}/conf.mail.d/${name}.conf"
 
   # Add IPv6 Logic Check - Nginx service will not start if ipv6 is enabled
   # and support does not exist for it in the kernel.
-  if ($ipv6_enable and !$::ipaddress6) {
+  if ($ipv6_enable and !$facts['networking']['ip6']) {
     warning('nginx: IPv6 support is not enabled or configured properly')
   }
 
@@ -140,10 +88,10 @@ define nginx::resource::mailhost (
     owner  => 'root',
     group  => $root_group,
     mode   => '0644',
-    notify => Class['::nginx::service'],
+    notify => Class['nginx::service'],
   }
 
-  if (($ssl_port == undef) or ($listen_port + 0) != ($ssl_port + 0)) {
+  if ($ssl_port == undef or Integer($listen_port) != Integer($ssl_port)) {
     concat::fragment { "${name}-header":
       target  => $config_file,
       content => template('nginx/mailhost/mailhost.erb'),

@@ -1,5 +1,9 @@
 require 'spec_helper'
 describe 'nginx::config' do
+  let(:pre_condition) do
+    'include nginx::service'
+  end
+
   context 'with defaults' do
     it do
       is_expected.to contain_file('/etc/nginx').only_with(
@@ -640,7 +644,7 @@ describe 'nginx::config' do
     context 'when nginx_error_log_severity = invalid' do
       let(:params) { { nginx_error_log_severity: 'invalid' } }
 
-      it { expect { is_expected.to contain_class('nginx::config') }.to raise_error(Puppet::Error, %r{\$nginx_error_log_severity must be debug, info, notice, warn, error, crit, alert or emerg}) }
+      it { expect { is_expected.to contain_class('nginx::config') }.to raise_error(Puppet::Error, %r{expects a match for Enum\[.*\], got 'invalid'}) }
     end
   end
 end

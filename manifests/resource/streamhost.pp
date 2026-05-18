@@ -49,62 +49,29 @@
 #    ensure   => present,
 #  }
 define nginx::resource::streamhost (
-  $ensure                       = 'present',
-  $listen_ip                    = '*',
-  $listen_port                  = 80,
-  $listen_options               = undef,
-  $ipv6_enable                  = false,
-  $ipv6_listen_ip               = '::',
-  $ipv6_listen_port             = 80,
-  $ipv6_listen_options          = 'default ipv6only=on',
-  $proxy                        = undef,
-  $proxy_read_timeout           = $::nginx::config::proxy_read_timeout,
-  $proxy_connect_timeout        = $::nginx::config::proxy_connect_timeout,
-  $resolver                     = [],
-  $server_name                  = [$name],
-  $raw_prepend                  = undef,
-  $raw_append                   = undef,
-  $owner                        = $::nginx::config::global_owner,
-  $group                        = $::nginx::config::global_group,
-  $mode                         = $::nginx::config::global_mode,
+  Enum['present', 'absent'] $ensure             = 'present',
+  Variant[Array, String] $listen_ip             = '*',
+  Integer $listen_port                          = 80,
+  Optional[String] $listen_options              = undef,
+  Boolean $ipv6_enable                          = false,
+  Variant[Array, String] $ipv6_listen_ip        = '::',
+  Integer $ipv6_listen_port                     = 80,
+  String $ipv6_listen_options                   = 'default ipv6only=on',
+  Optional[String] $proxy                       = undef,
+  String $proxy_read_timeout                    = $::nginx::config::proxy_read_timeout,
+  $proxy_connect_timeout                        = $::nginx::config::proxy_connect_timeout,
+  Array $resolver                               = [],
+  Array $server_name                            = [$name],
+  Optional[Variant[Array, String]] $raw_prepend = undef,
+  Optional[Variant[Array, String]] $raw_append  = undef,
+  String $owner                                 = $::nginx::config::global_owner,
+  String $group                                 = $::nginx::config::global_group,
+  String $mode                                  = $::nginx::config::global_mode,
 ) {
 
-  validate_re($ensure, '^(present|absent)$',
-    "${ensure} is not supported for ensure. Allowed values are 'present' and 'absent'.")
-  if !(is_array($listen_ip) or is_string($listen_ip)) {
-    fail('$listen_ip must be a string or array.')
+    if $mode !~ /^\d{4}$/ {
+    fail("${mode} is not valid. It should be 4 digits (0644 by default).")
   }
-  if is_string($listen_port) {
-    warning('DEPRECATION: String $listen_port must be converted to an integer. Integer string support will be removed in a future release.')
-  }
-  elsif !is_integer($listen_port) {
-    fail('$listen_port must be an integer.')
-  }
-  if ($listen_options != undef) {
-    validate_string($listen_options)
-  }
-  validate_bool($ipv6_enable)
-  if !(is_array($ipv6_listen_ip) or is_string($ipv6_listen_ip)) {
-    fail('$ipv6_listen_ip must be a string or array.')
-  }
-  if is_string($ipv6_listen_port) {
-    warning("DEPRECATION: String ${ipv6_listen_port} must be converted to an integer. \
-            Integer string support will be removed in a future release.")
-  }
-  elsif !is_integer($ipv6_listen_port) {
-    fail('$ipv6_listen_port must be an integer.')
-  }
-  validate_string($ipv6_listen_options)
-
-  validate_string($proxy_read_timeout)
-
-  validate_array($resolver)
-  validate_array($server_name)
-
-  validate_string($owner)
-  validate_string($group)
-  validate_re($mode, '^\d{4}$',
-    "${mode} is not valid. It should be 4 digits (0644 by default).")
 
   # Variables
   $streamhost_dir = "${::nginx::config::conf_dir}/streams-available"
@@ -122,7 +89,7 @@ define nginx::resource::streamhost (
       'absent' => absent,
       default  => 'file',
     },
-    notify => Class['::nginx::service'],
+    notify => Class['nginx::service'],
     owner  => $owner,
     group  => $group,
     mode   => $mode,
@@ -130,7 +97,7 @@ define nginx::resource::streamhost (
 
   # Add IPv6 Logic Check - Nginx service will not start if ipv6 is enabled
   # and support does not exist for it in the kernel.
-  if ($ipv6_enable == true) and (!$::ipaddress6) {
+  if ($ipv6_enable == true) and (!$facts['networking']['ip6']) {
     warning('nginx: IPv6 support is not enabled or configured properly')
   }
 
@@ -138,7 +105,7 @@ define nginx::resource::streamhost (
     owner  => $owner,
     group  => $group,
     mode   => $mode,
-    notify => Class['::nginx::service'],
+    notify => Class['nginx::service'],
   }
 
   concat::fragment { "${name_sanitized}-header":
@@ -152,7 +119,7 @@ define nginx::resource::streamhost (
     path    => "${streamhost_enable_dir}/${name_sanitized}.conf",
     target  => $config_file,
     require => Concat[$config_file],
-    notify  => Class['::nginx::service'],
+    notify  => Class['nginx::service'],
   }
 
 }

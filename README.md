@@ -17,9 +17,10 @@ This module manages NGINX configuration.
 
 ### Requirements
 
-* Puppet 3.0.0 or later
-* Facter 1.7.0 or later
-* Ruby 1.9.3 or later (Support for Ruby-1.8.7 is not guaranteed. YMMV).
+* Puppet 8.0.0 or later
+* Facter 4.11.0 or later
+* Ruby 3.2.9 or later
+  * Ruby 3.4.9 would be better, but there are some conflicts with puppet 8 that manifest in this module
 
 ### Additional Documentation
 
@@ -296,4 +297,14 @@ nginx::resource::location { "some_root":
 web::nginx_ssl_with_redirect { 'sub-domain-name':
     backend_port => 9001,
   }
+```
+
+## Testing
+
+There are some linting and unit tests done via CircleCI.  These tests can also be run
+locally with Docker:
+
+```
+docker-compose run lint
+docker-compose run test
 ```

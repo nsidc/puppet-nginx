@@ -1,0 +1,17 @@
+services:
+
+  lint:
+    image: "test-puppet-nginx"
+    build: "."
+    volumes:
+      # Code
+      - "./manifests:/test/manifests"
+    command: "bundle exec rake lint"
+
+  test:
+    image: "test-puppet-nginx"
+    build: "."
+    volumes:
+      # Code
+      - "./manifests:/test/manifests"
+    command: "bundle exec rake test"
