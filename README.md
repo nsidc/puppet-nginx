@@ -1,12 +1,13 @@
 # NGINX Module
 
-> [!WARNING] This fork of
+> [!WARNING] 
+> This fork of
 > [voxpupuli/puppet-nginx](https://github.com/voxpupuli/puppet-nginx) is being
 > sunset in 2026 and will no longer be maintained. We encourage users of this
 > fork to migrate to using the upstream,
-> [voxpupuli/puppet-nginx](https://github.com/voxpupuli/puppet-nginx)!
-> Follow the directions in [MIGRATING_TO_UPSTEAM.md](./MIGRATING_TO_UPSTREAM.md)
-> for instructions on how to do so.
+> [voxpupuli/puppet-nginx](https://github.com/voxpupuli/puppet-nginx)!  Follow
+> the directions in [MIGRATING_TO_UPSTEAM.md](./MIGRATING_TO_UPSTREAM.md) for
+> instructions on how to do so.
 
 This module got migrated from James Fryman <james@frymanet.com> and Matthew Haughton <matt@3flex.com.au> to Vox Pupuli.
 
