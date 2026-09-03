@@ -95,7 +95,8 @@ nginx::resource::location { 'root':
 }
 ```
 
-> [!NOTE] Be sure to add `use_default_location => false` to the
+> [!NOTE] 
+> Be sure to add `use_default_location => false` to the
 > `nginx::resource::server` block so that you can setup the root location in
 > `nginx::resource::location`. If you don't do this, you will get errors from
 > puppet about duplicate resource definitions.
